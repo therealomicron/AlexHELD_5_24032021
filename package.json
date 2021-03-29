@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --config webpack.config.js --mode production",
-    "serve": "webpack --config webpack.config.js --watch --mode development"
+    "serve": "webpack serve  --mode development"
   },
   "repository": {
     "type": "git",
@@ -21,11 +21,13 @@
   "dependencies": {
     "autoprefixer": "^10.2.4",
     "css-loader": "^5.0.2",
+    "mini-css-extract-plugin": "^1.4.0",
     "node-sass": "^5.0.0",
     "postcss": "^8.2.5",
     "postcss-loader": "^5.0.0",
     "sass-loader": "^11.0.0",
-    "webpack": "^5.21.1",
-    "webpack-cli": "^4.5.0"
+    "webpack": "^5.27.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }
