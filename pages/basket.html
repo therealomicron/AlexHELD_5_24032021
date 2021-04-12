@@ -12,29 +12,32 @@
         <title>Orinoco</title>
     </head>
 
-    <body class="bg-dark text-white">
-        <header class="d-flex flex-row justify-content-between align-items-end">
-            <a href="./index.html"> <img src="./assets/img/logo_300.png" alt="Le logo d'Orinoco" /> </a>
-            <a class="m-3" href="./pages/basket.html"><i class="fas fa-shopping-basket"></i></a>
+    <body class="bg-dark text-white d-flex flex-column">
+        <header class="vw-100 d-flex flex-row justify-content-between align-items-end">
+            <a href="./index.html"> <img src="../assets/img/logo_300.png" alt="Le logo d'Orinoco" /> </a>
+            <a class="m-3" href="../pages/basket.html"><i class="fas fa-shopping-basket"></i></a>
         </header>
 
-        <main>
+        <main class="d-flex flex-column align-items-center">
             <section>
-                <h1>Welcome to your basket</h1>
+                <h1 class="text-center">Welcome to your basket</h1>
             </section>
 
-            <section>
-                <article>
+            <section class="d-flex flex-row border border-light w-75">
+                <img class="w-25 h-auto" src="../assets/img/vcam_1.jpg" alt="A camera for hipsters" />
+                <article class="d-flex flex-column">
                     <h2>Item name</h2>
                     <p>price</p>
                     <p>option chosen</p>
-                    <p>shortened description</p>
+                    <p class="text-truncate">shortened description</p>
+                    <button class="align-self-">Supprimer</button>
                 </article>
             </section>
         </main>
 
-        <footer>
-
+        <footer class="d-flex flex-row justify-content-center">
+            <a class="mx-3" href="#">À propos</a>
+            <a class="mx-3" href="#">Contact</a>
         </footer>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
