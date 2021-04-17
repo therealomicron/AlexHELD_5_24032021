@@ -77,7 +77,7 @@ function addToProducts(obj, i) {
 productArray(productAPI).then(value => {
     productList = value;
     console.log(productList);
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < productList.length; i++) {
         addToProducts(productList[i], i);
     }
 });
