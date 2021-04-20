@@ -38,7 +38,7 @@ function makeFigure(obj) {
     return newFigure;
 }
 
-function makeDiv(obj, i) {
+function makeDiv(obj) {
     const newDiv = document.createElement("div");
     newDiv.classList.add("col-8");
     const newTitle = document.createElement("h2");
@@ -49,7 +49,7 @@ function makeDiv(obj, i) {
     newDescription.textContent = obj.description;
     newDescription.classList.add("text-truncate");
     const newLink = document.createElement("a");
-    newLink.setAttribute("href", "./pages/product.html?pid=" + i);
+    newLink.setAttribute("href", "./pages/product.html?pid=" + obj._id);
     newLink.textContent = "Afficher le produit";
     newDiv.appendChild(newTitle);
     newDiv.appendChild(newPrice);
@@ -58,25 +58,25 @@ function makeDiv(obj, i) {
     return newDiv;
 };
 
-function makeArticle(obj, i) {
+function makeArticle(obj) {
     const newArticle = document.createElement("article");
     newArticle.classList.add("d-flex");
     newArticle.classList.add("flew-row");
     newArticle.classList.add("m-3");
     newArticle.appendChild(makeFigure(obj));
-    newArticle.appendChild(makeDiv(obj, i));
+    newArticle.appendChild(makeDiv(obj));
     return newArticle;
 }
 
-function addToProducts(obj, i) {
+function addToProducts(obj) {
     const products = document.querySelector("#products");
-    products.appendChild(makeArticle(obj, i));
+    products.appendChild(makeArticle(obj));
 }
 
 productArray(productAPI).then(value => {
     productList = value;
     console.log(productList);
     for (let i = 0; i < productList.length; i++) {
-        addToProducts(productList[i], i);
+        addToProducts(productList[i]);
     }
 });
