@@ -132,7 +132,7 @@ getProductArray(productAPI).then(value => {
     product = value[pID];
     const productLength = value.length
     if (typeof window.localStorage.getItem("basket") === 'object') {
-        createBasket(productLength)
+        createBasketObject(productLength)
     } else {
         initializeBasketArray();
     };
