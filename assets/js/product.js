@@ -2,6 +2,8 @@ let url = location;
 let searchParams = new URLSearchParams(url.search);
 let pID = searchParams.get("pid");
 let product;
+let zeroArray = [];
+let basketArray;
 const productAPI = "http://localhost:3000/api/cameras";
 const articleClasses = ["d-flex", "flex-column", "flex-md-row", "my-3"];
 const figureClasses = ["w-50", "mx-3"];
@@ -10,6 +12,24 @@ const divContainerClasses = ["d-flex", "flex-column", "justify-content-start", "
 const divOptionsClasses = ["d-flex", "flex-row", "align-items-baseline", "justify-content-start", "w-100"];
 const divBuyClasses = ["d-flex", "flex-column", "justify-content-start", "m-3"];
 const quantityInputClasses = ["mx-3", "my-1"];
+let buyBtn; 
+let orderQTY;
+function createBasketObject(arrayLength) {
+    let i = 0;
+    for(i; i < arrayLength; i++) {
+        zeroArray.push(0);
+    }
+    window.localStorage.setItem("basket", zeroArray);
+}
+function initializeBasketArray() {
+    basketArray = window.localStorage.getItem("basket").split(",");
+    console.log(basketArray);
+} 
+function modifyBasket() {
+    basketArray[pID] = parseInt(basketArray[pID], 10) + parseInt(orderQTY.value, 10);
+    window.localStorage.setItem("basket", basketArray);
+    console.log(window.localStorage.getItem("basket").split(","))
+}
 function getProductList(url) {
     return new Promise(function (resolve, reject) {
         let productListAsk = new XMLHttpRequest;
@@ -75,17 +95,19 @@ function makeOrderInputs() {
     const newLabel = document.createElement("label");
     newLabel.setAttribute("for", "quantity");
     newLabel.textContent = "Quantité souhaité : ";
-    quantityInputClasses.forEach(element => {newLabel.classList.add(element)});
+    quantityInputClasses.forEach(element => { newLabel.classList.add(element) });
     const newQuantityInput = document.createElement('input');
     newQuantityInput.setAttribute("type", "number");
     newQuantityInput.setAttribute("min", "1");
+    newQuantityInput.setAttribute("max", "42")
     newQuantityInput.setAttribute("id", "quantity");
     newQuantityInput.setAttribute("name", "quantity");
-    quantityInputClasses.forEach(element => {newQuantityInput.classList.add(element)});
+    quantityInputClasses.forEach(element => { newQuantityInput.classList.add(element) });
     const newBuyButton = document.createElement("input");
     newBuyButton.setAttribute("type", "submit");
-    newBuyButton.setAttribute("value", "Acheter maintenant");
-    quantityInputClasses.forEach(element => {newBuyButton.classList.add(element)});
+    newBuyButton.setAttribute("value", "Acheter maintenant");i
+    newBuyButton.setAttribute("id", "buyBtn");
+    quantityInputClasses.forEach(element => { newBuyButton.classList.add(element) });
     newDivOrder.appendChild(newLabel);
     newDivOrder.appendChild(newQuantityInput);
     newDivOrder.appendChild(newBuyButton);
@@ -103,8 +125,20 @@ async function getProductArray(url) {
     let productArray = await getProductList(url);
     return productArray;
 };
+function orderProduct() {
+    document.querySelector("#quantity").value
+}
 getProductArray(productAPI).then(value => {
     product = value[pID];
+    const productLength = value.length
+    if (typeof window.localStorage.getItem("basket") === 'object') {
+        createBasket(productLength)
+    } else {
+        initializeBasketArray();
+    };
     const section = document.querySelector("section");
     section.appendChild(makeArticle(product));
+    buyBtn = document.querySelector("#buyBtn");
+    orderQTY = document.querySelector("#quantity");
+    buyBtn.addEventListener('click', () => modifyBasket())
 });

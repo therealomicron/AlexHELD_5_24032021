@@ -62,8 +62,7 @@ function makeArticle(obj, i) {
     const newArticle = document.createElement("article");
     newArticle.classList.add("d-flex");
     newArticle.classList.add("flew-row");
-    newArticle.classList.add("mx-3");
-    newArticle.classList.add("my-y");
+    newArticle.classList.add("m-3");
     newArticle.appendChild(makeFigure(obj));
     newArticle.appendChild(makeDiv(obj, i));
     return newArticle;
