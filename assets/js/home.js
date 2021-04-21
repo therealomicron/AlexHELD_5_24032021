@@ -7,11 +7,8 @@ function getProductList(url) {
         productListAsk.onreadystatechange = function () {
             if (productListAsk.readyState === 4) {
                 if (productListAsk.status === 200) {
-                    console.log(productListAsk.readyState);
-                    console.log(productListAsk.status);
                     resolve(productListAsk.response);
                 } else {
-                    console.log(productListAsk.status);
                     reject(productListAsk.response);
                 }
             } else {
@@ -75,7 +72,6 @@ function addToProducts(obj) {
 
 productArray(productAPI).then(value => {
     productList = value;
-    console.log(productList);
     for (let i = 0; i < productList.length; i++) {
         addToProducts(productList[i]);
     }

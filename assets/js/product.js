@@ -4,7 +4,7 @@ let pID = searchParams.get("pid");
 let product;
 let zeroArray = [];
 let basketArray;
-const productAPI = "http://localhost:3000/api/cameras";
+const productAPI = "http://localhost:3000/api/cameras/" + pID;
 const articleClasses = ["d-flex", "flex-column", "flex-md-row", "my-3"];
 const figureClasses = ["w-50", "mx-3"];
 const imgClasses = ["w-100", "mx-3", "img-thumbnail"];
@@ -14,22 +14,10 @@ const divBuyClasses = ["d-flex", "flex-column", "justify-content-start", "m-3"];
 const quantityInputClasses = ["mx-3", "my-1"];
 let buyBtn; 
 let orderQTY;
-function createBasketObject(arrayLength) {
-    let i = 0;
-    for(i; i < arrayLength; i++) {
-        zeroArray.push(0);
-    }
-    window.localStorage.setItem("basket", zeroArray);
-}
-function initializeBasketArray() {
-    basketArray = window.localStorage.getItem("basket").split(",");
-    console.log(basketArray);
-} 
-function modifyBasket() {
-    basketArray[pID] = parseInt(basketArray[pID], 10) + parseInt(orderQTY.value, 10);
-    window.localStorage.setItem("basket", basketArray);
-    console.log(window.localStorage.getItem("basket").split(","))
-}
+async function getProductArray(url) {
+    let productArray = await getProductList(url);
+    return productArray;
+};
 function getProductList(url) {
     return new Promise(function (resolve, reject) {
         let productListAsk = new XMLHttpRequest;
@@ -48,6 +36,14 @@ function getProductList(url) {
         productListAsk.send();
 
     });
+};
+function makeArticle(obj) {
+    const newArticle = document.createElement("article");
+    articleClasses.forEach(element => { newArticle.classList.add(element) });
+    newArticle.appendChild(makeFigure(obj));
+    newArticle.appendChild(makeDivContainer(obj));
+    newArticle.appendChild(makeOrderInputs());
+    return newArticle;
 };
 function makeFigure(obj) {
     const newFigure = document.createElement("figure");
@@ -113,32 +109,39 @@ function makeOrderInputs() {
     newDivOrder.appendChild(newBuyButton);
     return newDivOrder;
 };
-function makeArticle(obj) {
-    const newArticle = document.createElement("article");
-    articleClasses.forEach(element => { newArticle.classList.add(element) });
-    newArticle.appendChild(makeFigure(obj));
-    newArticle.appendChild(makeDivContainer(obj));
-    newArticle.appendChild(makeOrderInputs());
-    return newArticle;
-};
-async function getProductArray(url) {
-    let productArray = await getProductList(url);
-    return productArray;
-};
-function orderProduct() {
-    document.querySelector("#quantity").value
-}
-getProductArray(productAPI).then(value => {
-    product = value[pID];
-    const productLength = value.length
-    if (typeof window.localStorage.getItem("basket") === 'object') {
-        createBasketObject(productLength)
+function declareBasketObject(arrayLength) {
+    if (typeof window.localStorage.getItem("basket") === "object") {
+        window.localStorage.setItem("basket", "");
+        console.log(window.localStorage.getItem("basket"));
     } else {
-        initializeBasketArray();
-    };
+        console.log("Local storage Basket object already present.")
+    }
+}
+function modifyBasket(qty, id) {
+   if (typeof window.localStorage.getItem(id) === "object") {
+       if (window.localStorage.getItem("basket").length === 0) {
+            window.localStorage.setItem("basket", id);
+            window.localStorage.setItem(id, qty);
+       } else {
+       newID = window.localStorage.getItem("basket") + ", " + id;
+       window.localStorage.setItem("basket", newID);
+       window.localStorage.setItem(id, qty);
+       console.log(window.localStorage.getItem(id)); 
+       }
+   } else {
+       console.log("Prior quantity: " + window.localStorage.getItem(id));
+       let newQTY = parseInt(qty) + parseInt(window.localStorage.getItem(id));
+       window.localStorage.setItem(id, newQTY);
+       console.log("New quantity: " + window.localStorage.getItem(id));
+   };
+};
+getProductArray(productAPI).then(value => {
+    product = value;
+    const productLength = value.length
     const section = document.querySelector("section");
     section.appendChild(makeArticle(product));
     buyBtn = document.querySelector("#buyBtn");
     orderQTY = document.querySelector("#quantity");
-    buyBtn.addEventListener('click', () => modifyBasket())
+    declareBasketObject();
+    buyBtn.addEventListener('click', () => modifyBasket(orderQTY.value, pID))
 });
