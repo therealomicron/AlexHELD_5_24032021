@@ -1,6 +1,10 @@
 const productAPI = "http://localhost:3000/api/cameras/"; ///API that contains all product data. combined with ID number to pull information on a single product.
 const quantityInputClasses = ["mx-3", "my-1"]; ///array of bootstrap classes that define the <input> markup for each individual product.
-let basketContents = window.localStorage.getItem("basket").split(","); ///array of items in basket parsed from local storage.
+if (typeof window.localStorage.getItem('basket') === 'object') {
+    basketContents = 0;
+} else {
+    basketContents = window.localStorage.getItem("basket").split(",");
+} 
 const articleClasses = ["d-flex", "flex-md-row", "flex-column", "border", "border-light", "col-md-8", "m-md-3", "my-3"]; ///bootstrap classes that define the article in which the product is displayed
 const divBuyClasses = ["d-flex", "flex-column", "justify-content-start", "m-3", "col-md-4"]; ///array of bootstrap classes that define the container of inputs for each individual product.
 const newImgClasses = ["w-100", "h-auto", "m-0"]; ///array of bootstrap classes that define the image of each product.
@@ -102,7 +106,6 @@ function onSubmit(obj) {
 
 function changeBasket(qty, id) {
     if (qty === 0 || qty < 0) {
-        /// deletes the stuff
         window.localStorage.removeItem(id);
         basketContents.splice(basketContents.indexOf(id), 1);
         window.localStorage.setItem('basket', basketContents);
@@ -113,10 +116,13 @@ function changeBasket(qty, id) {
     }
 };
 
-if (typeof window.localStorage.getItem('basket') === 'null') {
-    const products = document.querySelector("#products");
-    products.textContent = "Ton panier est vide";
+window.onload = () =>  { if (basketContents === 0) {
+    console.log("I'm empty")
+    const product = document.querySelector("#products");
+    const empty = document.createElement('p');
+    empty.textContent = 'Ton panier est vide.';
+    product.appendChild(empty);
 } else {basketContents.forEach(element => getProductObject(productAPI + element).then(value => {
     productObject = value;
     addToProducts(productObject);
-}))}
+}))}}
