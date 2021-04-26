@@ -95,7 +95,6 @@ function makeOrderInputs() {
     const newQuantityInput = document.createElement('input');
     newQuantityInput.setAttribute("type", "number");
     newQuantityInput.setAttribute("min", "1");
-    newQuantityInput.setAttribute("max", "42")
     newQuantityInput.setAttribute("id", "quantity");
     newQuantityInput.setAttribute("name", "quantity");
     quantityInputClasses.forEach(element => { newQuantityInput.classList.add(element) });
@@ -123,7 +122,7 @@ function modifyBasket(qty, id) {
             window.localStorage.setItem("basket", id);
             window.localStorage.setItem(id, qty);
        } else {
-       newID = window.localStorage.getItem("basket") + ", " + id;
+       newID = window.localStorage.getItem("basket") + "," + id;
        window.localStorage.setItem("basket", newID);
        window.localStorage.setItem(id, qty);
        console.log(window.localStorage.getItem(id)); 
