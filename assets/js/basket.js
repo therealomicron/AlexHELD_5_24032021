@@ -122,43 +122,37 @@ function makeContact() {
     const nom = document.querySelector("#nom");
     const prenom = document.querySelector("#prenom");
     const adresse = document.querySelector("#adresse");
-    const ville = document.querySelector("ville");
+    const ville = document.querySelector("#ville");
     const courriel = document.querySelector("#email");
-    const commander = document.querySelector("#commander");
     const tos = document.querySelector("#tos");
-    [nom, prenom, adresse, ville, courriel].forEach(element => {
-        if (element.value = "") {
-            alert("Vous n'avez pas complété tous les champs.");
-            tos.setAttribute("checked", "false");
-            return false;
-        } else if (typeof element !== 'string') {
-            alert("Votre saisie n'a pas pu être validé.");
-            tos.setAttribute("checked", "false");
-            return false;
+    const commander = document.querySelector("#commander");
+    if ([nom, prenom, adresse, ville, courriel].every(element => {
+        if (element.value !== "" && typeof element.value === 'string') {
+            return true;
         } else {
-            commander.removeAttribute("disabled");
-            contact = {
-                lastName: nom.value,
-                firstName: prenom.value,
-                address: adresse.value,
-                city: ville.value,
-                email: courriel.value
-            };
+            commander.setAttribute("disabled", "true");
+            return false;
         }
-    })
+    })) {
+        commander.removeAttribute("disabled");
+    };
 }
 
 window.onload = () => {
+        const commander = document.querySelector("#commander");
+        const tos = document.querySelector("#tos");
     if (basketContents === 0) {
         console.log("I'm empty")
         const product = document.querySelector("#products");
         const empty = document.createElement('p');
         empty.textContent = 'Ton panier est vide.';
         product.appendChild(empty);
+        tos.addEventListener("change", () => makeContact());
     } else {
         basketContents.forEach(element => getProductObject(productAPI + element).then(value => {
             productObject = value;
             addToProducts(productObject);
+            tos.addEventListener("change", () => makeContact());
         }))
     }
 }
