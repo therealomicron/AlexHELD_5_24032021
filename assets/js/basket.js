@@ -2,6 +2,7 @@ const productAPI = "http://localhost:3000/api/cameras/"; ///API that contains al
 const quantityInputClasses = ["mx-3", "my-1"]; ///array of bootstrap classes that define the <input> markup for each individual product.
 let contact;
 let basketContents;
+let total = 0;
 if (typeof window.localStorage.getItem('basket') === 'object') {
     basketContents = 0;
 } else {
@@ -33,6 +34,25 @@ function getProductList(url) {
         productListAsk.send();
     });
 };
+function postCommande() {
+    return new Promise(function (resolve, reject) {
+        let postOrder = new XMLHttpRequest;
+        postOrder.open('POST', "http://localhost:3000/api/cameras/order", true);
+        postOrder.onreadystatechange = function () {
+            if (postOrder.readyState === 4) {
+                if (postOrder.status === 200) {
+                    resolve(JSON.parse(postOrder.response))
+                } else {
+                    alert("Status: " + postOrder.status);
+                }
+            } else {
+                console.log("Ready state: " + console.log(postOrder.readyState))
+            }
+        };
+        postOrder.setRequestHeader('Content-Type', 'application/json');
+        postOrder.send(JSON.stringify(contact + basketContents));
+    });
+}
 function addToProducts(obj) {
     const products = document.querySelector("#products");
     products.appendChild(makeArticle(obj));
@@ -131,16 +151,25 @@ function makeContact() {
             return true;
         } else {
             commander.setAttribute("disabled", "true");
+            tos.checked = false;
+            alert("Veuillez bien vérifier votre saisie.")
             return false;
         }
     })) {
         commander.removeAttribute("disabled");
+        contact = {
+            lastName: nom.value,
+            firstName: prenom.value,
+            address: adresse.value,
+            city: ville.value,
+            email: courriel.value
+        }
     };
 }
 
 window.onload = () => {
-        const commander = document.querySelector("#commander");
-        const tos = document.querySelector("#tos");
+    const commander = document.querySelector("#commander");
+    const tos = document.querySelector("#tos");
     if (basketContents === 0) {
         console.log("I'm empty")
         const product = document.querySelector("#products");
@@ -151,8 +180,11 @@ window.onload = () => {
     } else {
         basketContents.forEach(element => getProductObject(productAPI + element).then(value => {
             productObject = value;
+            const prixTotal = document.querySelector("#prixTotal");
             addToProducts(productObject);
             tos.addEventListener("change", () => makeContact());
+            total = total + ((productObject.price / 100) * Number(window.localStorage.getItem(productObject._id)));
+            prixTotal.textContent = "Total de la commande : " + total + "€";
         }))
     }
 }
