@@ -22,35 +22,37 @@
             <section>
                 <h1 class="text-center">Welcome to your basket</h1>
             </section>
-            <section id="products" class="d-flex flex-column w-100 align-items-start">
+            <section id="products" class="d-flex flex-column w-100">
 
             </section>
             <section class="d-flex flex-column w-100 align-items-center m-3">
-                <form class="d-flex flex-column w-100">
+                <form class="m-3">
                     <div class="d-flex flex-column flex-md-row">
                     <Label>Nom
-                        <input type="text" id="nom" class="m-3" />
+                        <input type="text" id="nom" class="m-3" required/>
                     </Label>
                     <label>Prénom
-                        <input type="text" id="prenom" class="m-3" />
+                        <input type="text" id="prenom" class="m-3" required/>
                     </label>
                     </div>
                     <div class="d-flex flex-column flex-md-row w-100 flex-wrap">
                     <label>Adresse
-                        <input type="text" id="adresse" class="m-3" />
+                        <input type="text" id="adresse" class="m-3" required/>
                     </label>
                     <label>Ville
-                        <input type="text" id="ville" class="m-3" />
+                        <input type="text" id="ville" class="m-3" required/>
                     </label>
                     <label>Code Postale
-                        <input type="text" id="zip" class="m-3" />
+                        <input type="text" id="zip" class="m-3" required/>
                     </label>
                     </div>
                     <label>Adresse Mail
-                        <input type="email" id="email" class="m-3" />
+                        <input type="email" id="email" class="m-3" required/>
                     </label>
-                    <div class="d-flex w-100">
-                    <input type="submit" value="Commander maintenant" id="commander" />
+                    <div class="d-flex flex-column align-items-center">
+                        <p>Je déclare avoir lu et pris connaissances des conditions de vente en ligne. </p>
+                        <input type='checkbox' class="m-3" id="tos" />
+                        <input type="submit" value="Commander maintenant" id="commander" disabled />
                     </div>
                 </form>
             </section>
