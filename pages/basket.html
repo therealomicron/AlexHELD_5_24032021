@@ -7,8 +7,8 @@
         <meta name="description" content="Site e-commerce de vente en ligne spécialisé" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="https://kit.fontawesome.com/974a47a886.js" crossorigin="anonymous"></script>
+        <script src="../assets/js/basket.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-        <link rel="stylesheet" href="./dist/css/basket.css" />
         <title>Orinoco</title>
     </head>
 
@@ -22,16 +22,42 @@
             <section>
                 <h1 class="text-center">Welcome to your basket</h1>
             </section>
+            <section id="products" class="d-flex flex-column w-100">
 
-            <section class="d-flex flex-row border border-light w-75 my-3">
-                <img class="w-25 h-auto" src="../assets/img/vcam_1.jpg" alt="A camera for hipsters" />
-                <article class="d-flex flex-column">
-                    <h2>Item name</h2>
-                    <p>price</p>
-                    <p>option chosen</p>
-                    <p class="text-truncate">shortened description</p>
-                    <button class="align-self-">Supprimer</button>
-                </article>
+            </section>
+            <section id="prix" class="d-flex flex-row align-items-end">
+                <p id="prixTotal"></p>
+            </section>
+            <section class="d-flex flex-column w-100 align-items-center m-3">
+                <div class="m-3">
+                    <div class="d-flex flex-column flex-md-row">
+                    <Label>Nom
+                        <input type="text" id="nom" class="m-3" required/>
+                    </Label>
+                    <label>Prénom
+                        <input type="text" id="prenom" class="m-3" required/>
+                    </label>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row w-100 flex-wrap">
+                    <label>Adresse
+                        <input type="text" id="adresse" class="m-3" required/>
+                    </label>
+                    <label>Ville
+                        <input type="text" id="ville" class="m-3" required/>
+                    </label>
+                    <label>Code Postale
+                        <input type="text" id="zip" class="m-3" required/>
+                    </label>
+                    </div>
+                    <label>Adresse Mail
+                        <input type="email" id="email" class="m-3" required/>
+                    </label>
+                    <div class="d-flex flex-column align-items-center">
+                        <p>Je déclare avoir lu et pris connaissances des conditions de vente en ligne. </p>
+                        <input type='checkbox' class="m-3" id="tos" />
+                        <input type="submit" value="Commander maintenant" id="commander" disabled />
+                    </div>
+                </div> 
             </section>
         </main>
 
