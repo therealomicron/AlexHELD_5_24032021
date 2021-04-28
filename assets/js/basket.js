@@ -42,11 +42,11 @@ function postCommande() {
         postOrder.open('POST', productAPI + "order", true);
         postOrder.onreadystatechange = function () {
             if (postOrder.readyState === 4) {
-                if (postOrder.status === 200) {
-                    resolve(JSON.parse(postOrder.response))
+                if (postOrder.status === 201) {
+                    resolve(JSON.parse(postOrder.response));
                 } else {
                     alert("Status: " + postOrder.status);
-                    resolve(JSON.parse(postOrder.response))
+                    resolve(JSON.parse(postOrder.response));
                 }
             } else {
                 console.log("Ready state: " + console.log(postOrder.readyState))
@@ -127,14 +127,17 @@ function onSubmit(obj) {
     const modBtn = document.querySelector("#mod" + pID);
     const qty = document.querySelector("#qty" + pID);
     modBtn.addEventListener('click', () => changeBasket(Number(qty.value), pID));
+
 }
 function changeBasket(qty, id) {
     if (qty === 0 || qty < 0) {
         window.localStorage.removeItem(id);
         basketContents.splice(basketContents.indexOf(id), 1);
         window.localStorage.setItem('basket', basketContents);
+        location.reload(true);
     } else if (typeof qty === 'number') {
         window.localStorage.setItem(id, qty);
+        location.reload(true);
     } else {
         alert("Quantity is not a number!");
     }
@@ -150,7 +153,6 @@ function makeContact() {
     commander = document.querySelector("#commander");
     if ([nom, prenom, adresse, ville, courriel].every(element => {
         if (element.value !== "" && typeof element.value === 'string') {
-            console.log("true")
             return true;
         } else {
             commander.setAttribute("disabled", "true");
@@ -173,12 +175,10 @@ function makeContact() {
         };
     };
 }
-
 window.onload = () => {
     const commander = document.querySelector("#commander");
     const tos = document.querySelector("#tos");
     if (basketContents === 0) {
-        console.log("I'm empty")
         const product = document.querySelector("#products");
         const empty = document.createElement('p');
         empty.textContent = 'Ton panier est vide.';
@@ -191,10 +191,13 @@ window.onload = () => {
             addToProducts(productObject);
             total = total + ((productObject.price / 100) * Number(window.localStorage.getItem(productObject._id)));
             prixTotal.textContent = "Total de la commande : " + total + "€";
+            window.localStorage.setItem("total", total);
         }));
         tos.addEventListener("change", () => makeContact());
         commander.addEventListener("click", () => postCommande().then(value => {
-            console.log(value);
+            orderId = value.orderId;
+            window.localStorage.setItem("orderId", orderId);
+            window.location.replace("./confirmation.html");
         } ));
     }
 };
