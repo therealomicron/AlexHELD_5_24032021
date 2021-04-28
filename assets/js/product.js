@@ -111,7 +111,6 @@ function makeOrderInputs() {
 function declareBasketObject(arrayLength) {
     if (typeof window.localStorage.getItem("basket") === "object") {
         window.localStorage.setItem("basket", "");
-        console.log(window.localStorage.getItem("basket"));
     } else {
         console.log("Local storage Basket object already present.")
     }
@@ -125,13 +124,10 @@ function modifyBasket(qty, id) {
        newID = window.localStorage.getItem("basket") + "," + id;
        window.localStorage.setItem("basket", newID);
        window.localStorage.setItem(id, qty);
-       console.log(window.localStorage.getItem(id)); 
        }
    } else {
-       console.log("Prior quantity: " + window.localStorage.getItem(id));
        let newQTY = parseInt(qty) + parseInt(window.localStorage.getItem(id));
        window.localStorage.setItem(id, newQTY);
-       console.log("New quantity: " + window.localStorage.getItem(id));
    };
 };
 getProductArray(productAPI).then(value => {

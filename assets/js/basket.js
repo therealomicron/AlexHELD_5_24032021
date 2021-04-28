@@ -3,6 +3,7 @@ const quantityInputClasses = ["mx-3", "my-1"]; ///array of bootstrap classes tha
 let contact;
 let basketContents;
 let total = 0;
+let orderObj;
 if (typeof window.localStorage.getItem('basket') === 'object') {
     basketContents = 0;
 } else {
@@ -36,21 +37,23 @@ function getProductList(url) {
 };
 function postCommande() {
     return new Promise(function (resolve, reject) {
+        
         let postOrder = new XMLHttpRequest;
-        postOrder.open('POST', "http://localhost:3000/api/cameras/order", true);
+        postOrder.open('POST', productAPI + "order", true);
         postOrder.onreadystatechange = function () {
             if (postOrder.readyState === 4) {
                 if (postOrder.status === 200) {
                     resolve(JSON.parse(postOrder.response))
                 } else {
                     alert("Status: " + postOrder.status);
+                    resolve(JSON.parse(postOrder.response))
                 }
             } else {
                 console.log("Ready state: " + console.log(postOrder.readyState))
             }
         };
         postOrder.setRequestHeader('Content-Type', 'application/json');
-        postOrder.send(JSON.stringify(contact + basketContents));
+        postOrder.send(JSON.stringify(orderObj));
     });
 }
 function addToProducts(obj) {
@@ -125,7 +128,6 @@ function onSubmit(obj) {
     const qty = document.querySelector("#qty" + pID);
     modBtn.addEventListener('click', () => changeBasket(Number(qty.value), pID));
 }
-
 function changeBasket(qty, id) {
     if (qty === 0 || qty < 0) {
         window.localStorage.removeItem(id);
@@ -137,17 +139,18 @@ function changeBasket(qty, id) {
         alert("Quantity is not a number!");
     }
 };
-
 function makeContact() {
+    console.log("makeContact function commencing")
     const nom = document.querySelector("#nom");
     const prenom = document.querySelector("#prenom");
     const adresse = document.querySelector("#adresse");
     const ville = document.querySelector("#ville");
     const courriel = document.querySelector("#email");
     const tos = document.querySelector("#tos");
-    const commander = document.querySelector("#commander");
+    commander = document.querySelector("#commander");
     if ([nom, prenom, adresse, ville, courriel].every(element => {
         if (element.value !== "" && typeof element.value === 'string') {
+            console.log("true")
             return true;
         } else {
             commander.setAttribute("disabled", "true");
@@ -164,6 +167,10 @@ function makeContact() {
             city: ville.value,
             email: courriel.value
         }
+        orderObj = {
+            contact,
+            products: basketContents
+        };
     };
 }
 
@@ -182,9 +189,12 @@ window.onload = () => {
             productObject = value;
             const prixTotal = document.querySelector("#prixTotal");
             addToProducts(productObject);
-            tos.addEventListener("change", () => makeContact());
             total = total + ((productObject.price / 100) * Number(window.localStorage.getItem(productObject._id)));
             prixTotal.textContent = "Total de la commande : " + total + "€";
-        }))
+        }));
+        tos.addEventListener("change", () => makeContact());
+        commander.addEventListener("click", () => postCommande().then(value => {
+            console.log(value);
+        } ));
     }
-}
+};
